@@ -3,8 +3,11 @@ S=kernel/asm
 
 OBJS = \
 	$S/entry.o \
-	$S/trampoline.o \
+	$S/trap.o \
 	$K/uart.o \
+	$K/printf.o \
+	$S/mem.o \
+	$K/page.o \
 	$K/main.o
 
 ifndef TOOLPREFIX

@@ -4,6 +4,7 @@ S=kernel/asm
 OBJS = \
 	$S/entry.o \
 	$S/trampoline.o \
+	$K/uart.o \
 	$K/main.o
 
 ifndef TOOLPREFIX

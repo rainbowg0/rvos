@@ -15,4 +15,6 @@ typedef long long int64_t;
 
 #define NULL (void*)(0)
 
+typedef unsigned long long pde_t;
+
 #endif //RVOS_TYPES_H

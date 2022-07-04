@@ -1,5 +1,6 @@
 K=kernel
 S=kernel/asm
+T=kernel/test
 
 OBJS = \
 	$S/entry.o \
@@ -8,6 +9,8 @@ OBJS = \
 	$K/printf.o \
 	$S/mem.o \
 	$K/page.o \
+	$T/pagetest.o \
+	$K/kmem.o \
 	$K/main.o
 
 ifndef TOOLPREFIX
@@ -49,7 +52,8 @@ $K/kernel: $(OBJS) $K/kernel.ld
 
 clean: 
 	rm -f $K/*.o $K/*.d $K/kernel $K/*.asm \
-			$S/*.o $S/*.d
+			$S/*.o $S/*.d \
+			$T/*.o $T/*.d
 
 # try to generate a unique GDB port
 GDBPORT = $(shell expr `id -u` % 5000 + 25000)
@@ -76,4 +80,7 @@ qemu: $K/kernel
 qemu-gdb: $K/kernel .gdbinit
 	@echo "*** Now run 'gdb' in another window." 1>&2
 	$(QEMU) $(QEMUOPTS) -S $(QEMUGDB)
+
+gdb:
+	riscv64-unknown-elf-gdb
 

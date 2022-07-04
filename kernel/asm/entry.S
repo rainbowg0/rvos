@@ -57,7 +57,7 @@ _entry:
 	mret
 2:
 	# We set the return address (ra above) to this label. When kinit() is finished
-	# it will return here.
+	# in C, it will return here.
 
 	# Setting `sstatus` (supervisor status) register:
 	# 1 << 8    : Supervisor's previous protection mode is 1 (SPP=1 [Supervisor]).

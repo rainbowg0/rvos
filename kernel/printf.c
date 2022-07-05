@@ -129,9 +129,12 @@ int printf(const char *s, ...) {
     return res;
 }
 
-void panic(char *s) {
+void panic(const char *s, ...) {
     printf("panic: ");
-    printf(s);
+    va_list vl;
+    va_start(vl, s);
+    _vprintf(s, vl);
+    va_end(vl);
     printf("\n");
     while (1)
         ;

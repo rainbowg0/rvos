@@ -1,8 +1,10 @@
 #include "include/defs.h"
 #include "include/memlayout.h"
 #include "include/riscv.h"
+#include "include/traphandler.h"
 
 static uint64_t KERNEL_TABLE;
+static struct trapframe trapframes[8];
 
 //////////////////////////////////
 // ENTRY POINT
@@ -31,7 +33,7 @@ uint64_t kinit() {
     printf("STACK:  0x%x -> 0x%x\n", KERNEL_STACK_START, KERNEL_STACK_END);
 	printf("HEAP:   0x%x -> 0x%x\n", head, head + npages * PGSIZE);
 
-    maprange(kpagetable, head, head + (npages + 1) * 4096, PTE_R|PTE_W);
+    maprange(kpagetable, head, head + (npages) * 4096, PTE_R|PTE_W);
 
     // map heap descriptor
     uint64_t num_pages = HEAP_SIZE / PGSIZE;
@@ -61,19 +63,14 @@ uint64_t kinit() {
     pagemap(kpagetable, CLINT, CLINT, PTE_R|PTE_W, 0);
 
     // MTIMECMP
-    pagemap(kpagetable, 0x200b000, 0x200b000, PTE_R|PTE_W, 0);
+    pagemap(kpagetable, CLINT_MTIMECMP(0), CLINT_MTIMECMP(0), PTE_R|PTE_W, 0);
 
     // MTIME
-    pagemap(kpagetable, 0x200c000, 0x200c000, PTE_R|PTE_W, 0);
+    pagemap(kpagetable, CLINT_MTIME, CLINT_MTIME, PTE_R|PTE_W, 0);
 
     // PLIC
     maprange(kpagetable, PLIC, 0xc002000, PTE_R|PTE_W);
     maprange(kpagetable, 0xc200000, 0xc208000, PTE_R|PTE_W);
-
-    printpagealloc();
-
-    //printf("\n");
-    //printkmemtable();
 
     // the following shows how to walk to tanslate a virtual
     // address into a physical address, use this whenever a
@@ -94,24 +91,71 @@ uint64_t kinit() {
     // 9 for Sv48
     KERNEL_TABLE = (uint64_t)kpagetable;
 
-    uint64_t satp_val = ((uint64_t)kpagetable >> 12) | ((uint64_t)8 << 60);
+    uint64_t satp_val = build_satp(8, 0, KERNEL_TABLE);
+
+    // have to store kernel's table, the tables will be moved back
+    // adn forth between kernel's table and user applications' table
+    w_mscratch((uint64_t)&trapframes[0]);
+    w_sscratch(r_mscratch());
+    trapframes[0].satp = satp_val;
+
+    // move the stack pointer to the very bottom. the stack is
+    // actually in a non-mapped page. the stack is decrement-before
+    // push and increment after pop. therefore, the stack will be 
+    // allocated before it is stored.
+    trapframes[0].trapstack = (uint8_t*)((uint64_t)pagezalloc(1) + PGSIZE);
+    maprange(kpagetable, (uint64_t)trapframes[0].trapstack - PGSIZE, \
+            (uint64_t)(trapframes[0].trapstack), PTE_R|PTE_W);
+
+    // the trap frame itself is stored in the mcratch register
+    maprange(kpagetable, r_mscratch(), r_mscratch() + sizeof(struct trapframe) * 8, PTE_R|PTE_W);
+
+    printpagealloc();
+    //uint64_t p = (uint64_t)trapframes[0].trapstack - 1;
+    //printf("walk 0x%x -> 0x%x\n", p, va2pa(kpagetable, p));
+
+    //p = CLINT_MTIMECMP(0);
+    //printf("walk 0x%x -> 0x%x\n", p, va2pa(kpagetable, p));
+
+    // the following shows how we're going to walk to translate a virtual
+    // address into a physical address. we will use this whenever a user
+    // space application requires services. since the user space application
+    // only knows virtual address, we have to translate silently behind
+    // the success.
+    printf("setting %p\n", satp_val);
+    printf("scratch reg = 0x%x\n", r_mscratch());
     w_satp(satp_val);
+    satp_fence_asid(0);
 
     return satp_val;
+}
+
+void kinit_hart(uint64_t hartid) {
+    // all non-zero harts initialize here
+    // we have to store the kernel's table. the table will be
+    // moved back and forth between the kernel's table and
+    // user applications' tables.
+    w_mscratch((uint64_t)(&trapframes[hartid]));
+    // copy the same mscratch over to the supervisor version of 
+    // the same register
+    w_sscratch(r_mscratch());
+    trapframes[hartid].hartid = hartid;
+
+    *(uint64_t*)CLINT_MTIMECMP(hartid) = *(uint64_t*)CLINT_MTIME + 10000000;
 }
 
 void kmain() {
     // kmain() starts in supervisor mode, so we should have the trap
     // vector setup and MMU turned on when get here.
-    uartputs("hello, os world!\n");
+    printf("hello, os wordl\n");
+    //printf("%d: hello, os world!\n", r_mhartid());
 
-    uint8_t *ptr = kzmalloc(16);
-    for (int i = 0; i < 16; i++) {
-        ptr[i] = i;
-    }
-    printf("%s\n", ptr);
-    printkmemtable();
-    kfree(ptr);
+    // set the next machine timer to fire
+    *(uint64_t*)CLINT_MTIMECMP(0) = *(uint64_t*)CLINT_MTIME + 10000000;
+
+    // try to cause a page fault
+    uint64_t *v = 0;
+    *v = 1;
 
 
     while (1) {}

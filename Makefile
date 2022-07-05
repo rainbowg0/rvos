@@ -11,6 +11,7 @@ OBJS = \
 	$K/page.o \
 	$T/pagetest.o \
 	$K/kmem.o \
+	$K/traphandler.o \
 	$K/main.o
 
 ifndef TOOLPREFIX

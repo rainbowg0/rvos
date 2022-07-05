@@ -220,6 +220,13 @@ w_mscratch(uint64_t x)
   asm volatile("csrw mscratch, %0" : : "r" (x));
 }
 
+static inline uint64_t
+r_mscratch() {
+  uint64_t x;		
+  asm volatile("csrr %0, mscratch" : "=r" (x) );;
+  return x;
+}
+
 // Supervisor Trap Cause
 static inline uint64_t
 r_scause()
@@ -324,6 +331,17 @@ sfence_vma()
   asm volatile("sfence.vma zero, zero");
 }
 
+static inline uint64_t
+build_satp(uint64_t mode, uint64_t asid, uint64_t addr) {
+    return ((uint64_t)mode << 60) | ((asid & 0xffff) << 44) | ((addr >> 12) & 0xffffffffff);
+}
+
+static inline void
+satp_fence_asid(uint64_t x) 
+{
+	asm volatile("sfence.vma zero, %0" : : "r" (x) );
+}
+
 #define PGSIZE 4096 // bytes per page
 #define PGSHIFT 12  // bits of offset within a page
 
@@ -358,5 +376,7 @@ typedef uint64_t pte_t;
 typedef uint64_t *pagetable_t; // 512 PTEs
 
 #define AllocFlag ((uint64_t)1<<63)
+
+#define ASYNC_BIT ((uint64_t)1 << 63)
 
 #endif //RVOS_RISCV_H

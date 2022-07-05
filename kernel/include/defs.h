@@ -6,6 +6,7 @@
 
 struct page;
 struct alloclist;
+struct trapframe;
 
 // uart.c
 void uartinit();
@@ -15,7 +16,7 @@ int uartgetc();
 
 // printf.c
 int printf(const char *s, ...);
-void panic(char *s);
+void panic(const char *s, ...);
 void assert(bool flag);
 
 // page.c

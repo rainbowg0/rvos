@@ -45,4 +45,12 @@ struct alloclist *gethead();
 uint64_t getnumalloc();
 pagetable_t gettable();
 
+// plic.c
+uint32_t plic_next();
+void plic_complete(uint32_t id);
+void plic_setthreshold(uint8_t tsh);
+bool plic_ispending(uint32_t id);
+void plic_enable(uint32_t id);
+void plic_setpriority(uint32_t id, uint8_t pri);
+
 #endif //RVOS_DEFS_H

@@ -69,8 +69,8 @@ uint64_t kinit() {
     pagemap(kpagetable, CLINT_MTIME, CLINT_MTIME, PTE_R|PTE_W, 0);
 
     // PLIC
-    maprange(kpagetable, PLIC, 0xc002000, PTE_R|PTE_W);
-    maprange(kpagetable, 0xc200000, 0xc208000, PTE_R|PTE_W);
+    maprange(kpagetable, PLIC, 0xc002001, PTE_R|PTE_W);
+    maprange(kpagetable, 0xc200000, 0xc208001, PTE_R|PTE_W);
 
     // the following shows how to walk to tanslate a virtual
     // address into a physical address, use this whenever a
@@ -142,21 +142,26 @@ void kinit_hart(uint64_t hartid) {
     trapframes[hartid].hartid = hartid;
 
     *(uint64_t*)CLINT_MTIMECMP(hartid) = *(uint64_t*)CLINT_MTIME + 10000000;
+    printf("hart%d bool\n", hartid);
 }
 
 void kmain() {
     // kmain() starts in supervisor mode, so we should have the trap
     // vector setup and MMU turned on when get here.
-    printf("hello, os wordl\n");
+    printf("hello, os world\n");
     //printf("%d: hello, os world!\n", r_mhartid());
 
     // set the next machine timer to fire
     *(uint64_t*)CLINT_MTIMECMP(0) = *(uint64_t*)CLINT_MTIME + 10000000;
 
     // try to cause a page fault
-    uint64_t *v = 0;
-    *v = 1;
+    //uint64_t *v = 0;
+    //*v = 1;
 
-
-    while (1) {}
+    printf("Setting up interrupts and PLIC...\n");
+    plic_setthreshold(0);
+    plic_enable(10);
+    plic_setpriority(10, 1);
+    printf("UART interrupts have been enabled\n");
+   while (1) {}
 }

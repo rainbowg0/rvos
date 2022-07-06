@@ -379,4 +379,7 @@ typedef uint64_t *pagetable_t; // 512 PTEs
 
 #define ASYNC_BIT ((uint64_t)1 << 63)
 
+#define RREG(addr) (*(volatile uint32_t*)(addr))
+#define WREG(addr, val) (*(volatile uint32_t*)(addr) = val)
+
 #endif //RVOS_RISCV_H

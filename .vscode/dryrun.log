@@ -1,5 +1,10 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/j/rvos'
-make: `kernel/kernel' is up to date.
+riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/syscall.o kernel/syscall.c
+ 
+riscv64-unknown-elf-ld -z max-page-size=4096 -T kernel/kernel.ld -o kernel/kernel kernel/asm/entry.o kernel/asm/swtch.o kernel/uart.o kernel/printf.o kernel/asm/mem.o kernel/page.o kernel/test/pagetest.o kernel/kmem.o kernel/trap.o kernel/plic.o kernel/proc.o kernel/spinlock.o kernel/syscall.o kernel/main.o 
+riscv64-unknown-elf-objdump -S kernel/kernel > kernel/kernel.asm
+riscv64-unknown-elf-objdump -t kernel/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel/kernel.sym
+ 
 make: Leaving directory `/Users/j/rvos'
  

@@ -131,6 +131,12 @@ uint64_t kinit() {
     uint64_t addr = proc_init();
     printf("init process created at address 0x%x\n", addr);
     
+    printf("TEXT:   0x%x -> 0x%x\n", TEXT_START, TEXT_END);
+	printf("RODATA: 0x%x -> 0x%x\n", RODATA_START, RODATA_END);
+	printf("DATA:   0x%x -> 0x%x\n", DATA_START, DATA_END);
+	printf("BSS:    0x%x -> 0x%x\n", BSS_START, BSS_END);
+    printf("STACK:  0x%x -> 0x%x\n", KERNEL_STACK_START, KERNEL_STACK_END);
+
     plic_setthreshold(0);
     // virtio = [1..8]
     // uart0 = 10
@@ -147,6 +153,7 @@ uint64_t kinit() {
     pagetable_t pgt = (pagetable_t)0x8021c000;
     printf("walk addr %p -> 0x%x\n", addr, va2pa(pgt, addr));
 
+    maprange(pgt, KERNEL_STACK_START, KERNEL_STACK_END, PTE_R|PTE_W|PTE_U);
     return addr;
 }
 

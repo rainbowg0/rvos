@@ -15,6 +15,7 @@ OBJS = \
 	$K/plic.o \
 	$K/proc.o \
 	$K/spinlock.o \
+	$K/syscall.o \
 	$K/main.o
 
 ifndef TOOLPREFIX

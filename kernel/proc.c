@@ -16,7 +16,6 @@ struct spinlock pid_lock;
 // eventually move this function out of here, but its
 // job is just to take a slot in the process list.
 void initcode() {
-    printf("111\n");
     while (1) {
     }    
  }
@@ -96,17 +95,18 @@ found:
     // also need to set the stack adjustment so that it is at
     // the bottom of the memory and far away from heap allocations.
     p->frame->regs[2] = STACK_ADDR + PGSIZE * 2;
+    printf("sp %p\n", p->frame->regs[2]);
     pagetable_t pgt = p->pgt;
     uint64_t pa = (uint64_t)p->stack;
     // map the stack onto the user's virtual address. 
     for (int i = 0; i < 2; i++) {
         uint64_t off = i * PGSIZE;
-        pagemap(pgt, STACK_ADDR + off, pa + off, PTE_R|PTE_W, 0);
+        pagemap(pgt, STACK_ADDR + off, pa + off, PTE_R|PTE_W|PTE_U, 0);
     }
 
     // map the program counter on the MMU
-    pagemap(pgt, STARTING, (uint64_t)fn, PTE_R|PTE_X, 0);
-    pagemap(pgt, STARTING + 0x1001, (uint64_t)fn + 0x1001, PTE_R|PTE_X, 0);
+    pagemap(pgt, STARTING, (uint64_t)fn, PTE_R|PTE_X|PTE_U, 0);
+    pagemap(pgt, STARTING + 0x1001, (uint64_t)fn + 0x1001, PTE_R|PTE_X|PTE_U, 0);
     printf("fn addr: %p\n", (uint64_t)fn);
 
     printf("pagetable 0x%x\n", (uint64_t)pgt);

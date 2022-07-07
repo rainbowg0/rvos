@@ -64,5 +64,7 @@ struct cpu* mycpu();
 uint64_t proc_init();
 struct proc* proc_alloc(void* fn);
 
+// syscall.c
+uint64_t do_syscall(uint64_t mepc, struct trapframe *frame);
 
 #endif //RVOS_DEFS_H

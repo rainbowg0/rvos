@@ -89,7 +89,7 @@ uint64_t m_trap(uint64_t epc, uint64_t tval, uint64_t cause, uint64_t hart,
             break;
         case 8:
             printf("Ecall from user mode! CPU%d ->0x%x\n", hart, epc);
-            ret_pc += 4;
+            ret_pc += do_syscall(ret_pc, frame);
             break;
         case 9:
             printf("Ecall from supervisor mode! CPU%d -> 0x%x\n", hart, epc);

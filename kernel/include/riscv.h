@@ -333,7 +333,7 @@ sfence_vma()
 
 static inline uint64_t
 build_satp(uint64_t mode, uint64_t asid, uint64_t addr) {
-    return ((uint64_t)mode << 60) | ((asid & 0xffff) << 44) | ((addr >> 12) & 0xffffffffff);
+    return (mode << 60) | ((asid & 0xffff) << 44) | ((addr >> 12) & 0xffffffffff);
 }
 
 static inline void

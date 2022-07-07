@@ -7,6 +7,7 @@
 struct page;
 struct alloclist;
 struct trapframe;
+struct spinlock;
 
 // uart.c
 void uartinit();
@@ -52,5 +53,16 @@ void plic_setthreshold(uint8_t tsh);
 bool plic_ispending(uint32_t id);
 void plic_enable(uint32_t id);
 void plic_setpriority(uint32_t id, uint8_t pri);
+
+// spinlock.c
+void spin_init(struct spinlock *lk);
+void spin_acquire(struct spinlock *lk);
+void spin_release(struct spinlock *lk);
+
+// proc.c
+struct cpu* mycpu();
+uint64_t proc_init();
+struct proc* proc_alloc(void* fn);
+
 
 #endif //RVOS_DEFS_H

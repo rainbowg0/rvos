@@ -4,15 +4,17 @@ T=kernel/test
 
 OBJS = \
 	$S/entry.o \
-	$S/trap.o \
+	$S/swtch.o \
 	$K/uart.o \
 	$K/printf.o \
 	$S/mem.o \
 	$K/page.o \
 	$T/pagetest.o \
 	$K/kmem.o \
-	$K/traphandler.o \
+	$K/trap.o \
 	$K/plic.o \
+	$K/proc.o \
+	$K/spinlock.o \
 	$K/main.o
 
 ifndef TOOLPREFIX

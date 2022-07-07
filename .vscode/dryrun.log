@@ -1,30 +1,5 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/j/rvos'
-riscv64-unknown-elf-gcc    -c -o kernel/asm/entry.o kernel/asm/entry.S
- 
-riscv64-unknown-elf-gcc    -c -o kernel/asm/trap.o kernel/asm/trap.S
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/uart.o kernel/uart.c
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/printf.o kernel/printf.c
- 
-riscv64-unknown-elf-gcc    -c -o kernel/asm/mem.o kernel/asm/mem.S
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/page.o kernel/page.c
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/test/pagetest.o kernel/test/pagetest.c
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/kmem.o kernel/kmem.c
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/traphandler.o kernel/traphandler.c
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/plic.o kernel/plic.c
- 
-riscv64-unknown-elf-gcc -Wall -Werror -O -fno-omit-frame-pointer -ggdb  -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector   -c -o kernel/main.o kernel/main.c
- 
-riscv64-unknown-elf-ld -z max-page-size=4096 -T kernel/kernel.ld -o kernel/kernel kernel/asm/entry.o kernel/asm/trap.o kernel/uart.o kernel/printf.o kernel/asm/mem.o kernel/page.o kernel/test/pagetest.o kernel/kmem.o kernel/traphandler.o kernel/plic.o kernel/main.o 
-riscv64-unknown-elf-objdump -S kernel/kernel > kernel/kernel.asm
-riscv64-unknown-elf-objdump -t kernel/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel/kernel.sym
- 
+make: `kernel/kernel' is up to date.
 make: Leaving directory `/Users/j/rvos'
  

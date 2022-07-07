@@ -33,7 +33,7 @@ m_trap_vector:
 	# csrrw will atomically swap t6 into mscratch and the old
 	# value of mscratch into t6. This is nice because we just
 	# switched values and didn't destroy anything -- all atomically!
-	# in cpu.rs we have a structure of:
+	# in proc.h we have a structure of:
 	#  32 gp regs		0
 	#  32 fp regs		256
 	#  SATP register	512
@@ -56,7 +56,7 @@ m_trap_vector:
 	# Restore the kernel trap frame into mscratch
 	csrw	mscratch, t5
 
-	# Get ready to go into Rust (trap.rs)
+	# Get ready to go into C (trap.c)
 	# We don't want to write into the user's stack or whomever
 	# messed with us here.
 	csrr	a0, mepc

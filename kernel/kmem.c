@@ -58,12 +58,12 @@ uint64_t _algetsize(alloclist *a) {
 // if that's the case, use alloc/dealloc from page.c
 void kmeminit() {
     // allocate 64 kernel pages (64 * 4096 = 262KB)
-    struct page *p = pagezalloc(64);
+    struct page *p = pagezalloc(512);
     if (p == NULL) {
         panic("kemeinit: no free memory");
     }
 
-    KMEM_ALLOC = 64;
+    KMEM_ALLOC = 512;
     KMEM_HEAD = (alloclist*)p;
     _alsetfree(KMEM_HEAD);
     _alsetsize(KMEM_HEAD, KMEM_ALLOC * PGSIZE);

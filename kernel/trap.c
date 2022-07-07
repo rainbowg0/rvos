@@ -1,4 +1,4 @@
-#include "include/traphandler.h"
+#include "include/trap.h"
 #include "include/riscv.h"
 #include "include/types.h"
 #include "include/memlayout.h"
@@ -70,11 +70,12 @@ uint64_t m_trap(uint64_t epc, uint64_t tval, uint64_t cause, uint64_t hart,
             printf("Machine software interrupt CPU%d\n", hart);
             break;
         case 7:
+            printf("timer interrupt\n");
             *(uint32_t*)CLINT_MTIMECMP(hart) = *(uint32_t*)CLINT_MTIME + 10000000;
             break;
         case 11:
             external_interrupt();
-            //printf("Machine external interrupt CPU%d\n", hart);
+            printf("Machine external interrupt CPU%d\n", hart);
             break;
         default:
             panic("Unhandled async trap CPU%d -> cause 0x%x\n", hart, cause);

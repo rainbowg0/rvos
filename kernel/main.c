@@ -1,22 +1,16 @@
 #include "include/defs.h"
 #include "include/memlayout.h"
 #include "include/riscv.h"
-#include "include/traphandler.h"
+#include "include/trap.h"
 
-static uint64_t KERNEL_TABLE;
+//static uint64_t KERNEL_TABLE;
 static struct trapframe trapframes[8];
 
 //////////////////////////////////
 // ENTRY POINT
 //////////////////////////////////
 uint64_t kinit() {
-    // kinit() runs in machine mode
-    // the job of kinit is to get us into supervisor mode
-    // as soon as possible.
-    uartinit();
-    pageinit();
-    kmeminit();
-
+    /*
     //printpages();
 
     //pagetest();
@@ -127,7 +121,33 @@ uint64_t kinit() {
     w_satp(satp_val);
     satp_fence_asid(0);
 
-    return satp_val;
+    */
+    // kinit() runs in machine mode
+    // the job of kinit is to get us into supervisor mode
+    // as soon as possible.
+    uartinit();
+    pageinit();
+    kmeminit();
+    uint64_t addr = proc_init();
+    printf("init process created at address 0x%x\n", addr);
+    
+    plic_setthreshold(0);
+    // virtio = [1..8]
+    // uart0 = 10
+    // pcie = [32..35]
+    // enable uart interrupt
+    plic_enable(10);
+    plic_setpriority(10, 1);
+    printf("UART interrupts have been enabled and are awaiting command\n");
+    printf("Getting ready for first precess.\n");
+    printf("issuing the first context switch timer\n");
+    *(uint64_t*)CLINT_MTIMECMP(0) = *(uint64_t*)CLINT_MTIME + 10000000;
+
+    printf("satp %p\n", r_satp());
+    pagetable_t pgt = (pagetable_t)0x8021c000;
+    printf("walk addr %p -> 0x%x\n", addr, va2pa(pgt, addr));
+
+    return addr;
 }
 
 void kinit_hart(uint64_t hartid) {
@@ -141,7 +161,7 @@ void kinit_hart(uint64_t hartid) {
     w_sscratch(r_mscratch());
     trapframes[hartid].hartid = hartid;
 
-    *(uint64_t*)CLINT_MTIMECMP(hartid) = *(uint64_t*)CLINT_MTIME + 10000000;
+    //*(uint64_t*)CLINT_MTIMECMP(hartid) = *(uint64_t*)CLINT_MTIME + 10000000;
     printf("hart%d bool\n", hartid);
 }
 
@@ -158,10 +178,18 @@ void kmain() {
     //uint64_t *v = 0;
     //*v = 1;
 
+    // set the interrupt system via the PLIC, have to set the threshold to
+    // something that won't mask all interrupts.
     printf("Setting up interrupts and PLIC...\n");
+    // lower the threshold wall so all interrupts can jump over it.
     plic_setthreshold(0);
+    // virtio = [1..8]
+    // uart0 = 10
+    // pcie = [32..35]
+    // enable uart interrupt
     plic_enable(10);
     plic_setpriority(10, 1);
     printf("UART interrupts have been enabled\n");
-   while (1) {}
+   
+    while (1) {}
 }

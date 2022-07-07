@@ -53,7 +53,7 @@ void _clear(page *p) {
 // 3. allocate on page structure per 4096 bytes. (V)
 void pageinit() {
     num_pages = (HEAP_SIZE / PGSIZE) - 8;
-    printf("HEAP_START = 0x%x, HEAP_SIZE = 0x%x, num of pages = 0x%x\n",
+    printf("HEAP_START = 0x%x, HEAP_SIZE = 0x%x, num of pages = %d\n",
         HEAP_START, HEAP_SIZE, num_pages);
 
     page *ptr = (page *)HEAP_START;

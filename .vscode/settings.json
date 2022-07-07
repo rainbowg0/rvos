@@ -5,6 +5,8 @@
         "defs.h": "c",
         "trap.h": "c",
         "riscv.h": "c",
-        "traphandler.h": "c"
+        "traphandler.h": "c",
+        "spinlock.h": "c",
+        "proc.h": "c"
     }
 }

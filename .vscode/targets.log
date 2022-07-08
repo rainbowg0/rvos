@@ -10,18 +10,17 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Jul  8 01:51:51 2022
+# Make data base, printed on Fri Jul  8 02:07:52 2022
 
 # Variables
 
- 
-# makefile (from `Makefile', line 66)
+# makefile (from `Makefile', line 67)
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; then echo "-gdb tcp::$(GDBPORT)"; else echo "-s -p $(GDBPORT)"; fi)
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
-# makefile (from `Makefile', line 34)
+# makefile (from `Makefile', line 35)
 QEMU = qemu-system-riscv64
 # environment
 VSCODE_LOG_NATIVE = false
@@ -34,6 +33,7 @@ VSCODE_LOG_NATIVE = false
 # makefile
 CURDIR := /Users/j/rvos
 # makefile (from `Makefile', line 1)
+ 
 K = kernel
 # makefile
 SHELL = /bin/sh
@@ -45,9 +45,9 @@ T = kernel/test
 VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"bbca1a7059cee8a1b93da8947fee1c4f.zh-cn","_translationsConfigFile":"/Users/j/Library/Application Support/Code/clp/bbca1a7059cee8a1b93da8947fee1c4f.zh-cn/tcf.json","_cacheRoot":"/Users/j/Library/Application Support/Code/clp/bbca1a7059cee8a1b93da8947fee1c4f.zh-cn","_resolvedLanguagePackCoreLocation":"/Users/j/Library/Application Support/Code/clp/bbca1a7059cee8a1b93da8947fee1c4f.zh-cn/30d9c6cd9483b2cc586687151bcbcd635f373630","_corruptedFile":"/Users/j/Library/Application Support/Code/clp/bbca1a7059cee8a1b93da8947fee1c4f.zh-cn/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
-# makefile (from `Makefile', line 49)
+# makefile (from `Makefile', line 50)
 CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb $(XCFLAGS) -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-# makefile (from `Makefile', line 64)
+# makefile (from `Makefile', line 65)
 GDBPORT = $(shell expr `id -u` % 5000 + 25000)
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
@@ -55,7 +55,7 @@ MAKEFILE_LIST :=  Makefile
 TMPDIR = /var/folders/84/3pdnqknj0z3607j09b22wpzh0000gp/T/
 # environment
 VSCODE_VERBOSE_LOGGING = true
-# makefile (from `Makefile', line 37)
+# makefile (from `Makefile', line 38)
 AS = $(TOOLPREFIX)gas
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
@@ -69,15 +69,15 @@ VSCODE_CWD = /
 PATH = /bin:/bin:/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/j/.cargo/bin:/usr/local/opt/riscv-gnu-toolchain/bin
 # environment
 GOROOT = /usr/local/opt/go/libexec
-# makefile (from `Makefile', line 38)
+# makefile (from `Makefile', line 39)
 LD = $(TOOLPREFIX)ld
-# makefile (from `Makefile', line 70)
+# makefile (from `Makefile', line 71)
 CPUS := 3
 # environment
 VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
-# makefile (from `Makefile', line 51)
+# makefile (from `Makefile', line 52)
 LDFLAGS = -z max-page-size=4096
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
@@ -88,7 +88,7 @@ SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.rsIJgJZXsw/Listeners
 # environment
 VSCODE_PIPE_LOGGING = true
 # makefile (from `Makefile', line 5)
-OBJS = $S/entry.o $S/swtch.o $K/uart.o $K/printf.o $S/mem.o $K/page.o $T/pagetest.o $K/kmem.o $K/trap.o $K/plic.o $K/proc.o $K/spinlock.o $K/syscall.o $K/main.o
+OBJS = $S/entry.o $S/swtch.o $K/uart.o $K/printf.o $S/mem.o $K/page.o $T/pagetest.o $K/kmem.o $K/trap.o $K/plic.o $K/proc.o $K/spinlock.o $K/syscall.o $K/sched.o $K/main.o
 # environment
 PWD = /Users/j/rvos
 # environment
@@ -123,9 +123,9 @@ MAKE = $(MAKE_COMMAND)
 MAKECMDGOALS := all
 # environment
 SHLVL = 1
-# makefile (from `Makefile', line 36)
+# makefile (from `Makefile', line 37)
 CC = $(TOOLPREFIX)gcc
-# makefile (from `Makefile', line 22)
+# makefile (from `Makefile', line 23)
 TOOLPREFIX := riscv64-unknown-elf-
 # default
 MAKE_VERSION := 3.81
@@ -159,13 +159,14 @@ XPC_SERVICE_NAME = application.com.microsoft.VSCode.44615351.44615357
 HOMEBREW_PREFIX = /usr/local
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
-# makefile (from `Makefile', line 40)
+ 
+# makefile (from `Makefile', line 41)
 OBJDUMP = $(TOOLPREFIX)objdump
 # automatic
 +F = $(notdir $+)
 # environment
 HOMEBREW_REPOSITORY = /usr/local/Homebrew
-# makefile (from `Makefile', line 75)
+# makefile (from `Makefile', line 76)
 QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 128M -smp $(CPUS) -nographic
 # environment
 __CF_USER_TEXT_ENCODING = 0x1F6:0:0
@@ -175,14 +176,13 @@ COMMAND_MODE = unix2003
 MAKEFILES := 
 # automatic
 <F = $(notdir $<)
-# makefile (from `Makefile', line 73)
+# makefile (from `Makefile', line 74)
 FWDPORT = $(shell expr `id -u` % 5000 + 25999)
 # environment
 LC_ALL = C
 # automatic
 ^F = $(notdir $^)
-# makefile (from `Makefile', line 39)
- 
+# makefile (from `Makefile', line 40)
 OBJCOPY = $(TOOLPREFIX)objcopy
 # default
 SUFFIXES := 
@@ -195,7 +195,7 @@ LANG = C
 # environment
 VSCODE_PID = 6388
 # variable set hash-table stats:
-# Load=89/1024=9%, Rehash=0, Collisions=10/148=7%
+# Load=89/1024=9%, Rehash=0, Collisions=10/149=7%
 
 # Pattern-specific Variable Values
 
@@ -217,7 +217,7 @@ qemu: kernel/kernel
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 80):
+#  commands to execute (from `Makefile', line 81):
 	$(QEMU) $(QEMUOPTS)
 	
 
@@ -225,7 +225,7 @@ gdb:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 90):
+#  commands to execute (from `Makefile', line 91):
 	riscv64-unknown-elf-gdb
 	
 
@@ -237,6 +237,12 @@ all:
 #  File has not been updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+kernel/sched.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 kernel/kernel.ld:
@@ -271,7 +277,7 @@ kernel/syscall.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-08 01:51:24
+#  Last modified 2022-07-08 02:07:51
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -287,13 +293,14 @@ kernel/asm/swtch.o:
 .gdbinit.tmpl-riscv:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
-kernel/kernel: kernel/asm/entry.o kernel/asm/swtch.o kernel/uart.o kernel/printf.o kernel/asm/mem.o kernel/page.o kernel/test/pagetest.o kernel/kmem.o kernel/trap.o kernel/plic.o kernel/proc.o kernel/spinlock.o kernel/syscall.o kernel/main.o kernel/kernel.ld
+kernel/kernel: kernel/asm/entry.o kernel/asm/swtch.o kernel/uart.o kernel/printf.o kernel/asm/mem.o kernel/page.o kernel/test/pagetest.o kernel/kmem.o kernel/trap.o kernel/plic.o kernel/proc.o kernel/spinlock.o kernel/syscall.o kernel/sched.o kernel/main.o kernel/kernel.ld
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 54):
+#  commands to execute (from `Makefile', line 55):
 	$(LD) $(LDFLAGS) -T $K/kernel.ld -o $K/kernel $(OBJS) 
 	$(OBJDUMP) -S $K/kernel > $K/kernel.asm
 	$(OBJDUMP) -t $K/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $K/kernel.sym
@@ -303,7 +310,7 @@ kernel/kernel: kernel/asm/entry.o kernel/asm/swtch.o kernel/uart.o kernel/printf
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 83):
+#  commands to execute (from `Makefile', line 84):
 	sed "s/:1234/:$(GDBPORT)/" < $^ > $@
 	
 
@@ -341,7 +348,7 @@ qemu-gdb: kernel/kernel .gdbinit
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 86):
+#  commands to execute (from `Makefile', line 87):
 	@echo "*** Now run 'gdb' in another window." 1>&2
 	$(QEMU) $(QEMUOPTS) -S $(QEMUGDB)
 	
@@ -350,7 +357,7 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 59):
+#  commands to execute (from `Makefile', line 60):
 	rm -f $K/*.o $K/*.d $K/kernel $K/*.asm \
 	$S/*.o $S/*.d \
 	$T/*.o $T/*.d
@@ -386,7 +393,6 @@ kernel/page.o:
 #  Modification time never checked.
 #  File has not been updated.
 
- 
 # Not a target:
 kernel/main.o:
 #  Implicit rule search has not been done.
@@ -394,7 +400,7 @@ kernel/main.o:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=26/1024=3%, Rehash=0, Collisions=0/57=0%
+# Load=27/1024=3%, Rehash=0, Collisions=0/59=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -405,7 +411,8 @@ kernel/main.o:
 # # of strcache buffers: 1
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+ 
 
-# Finished Make data base on Fri Jul  8 01:51:51 2022
+# Finished Make data base on Fri Jul  8 02:07:52 2022
 
  

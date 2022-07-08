@@ -7,8 +7,11 @@ uint64_t do_syscall(uint64_t mepc, struct trapframe *frame) {
     switch (sysno)
     {
     case 0:
-        mepc + 4;
+        mepc += 4;
         break;
+    case 1:
+        printf("test syscall\n");
+        mepc += 4;
     
     default:
         printf("unknown syscall number %d\n", sysno);

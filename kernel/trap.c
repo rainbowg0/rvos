@@ -4,6 +4,8 @@
 #include "include/memlayout.h"
 #include "include/defs.h"
 
+extern void switch_to_user(uint64_t frame, uint64_t mepc, uint64_t satp);
+
 void external_interrupt() {
     // machine external (interrupt from PLIC).
     // check the next interrupt, if the interrupt isn't vailable,
@@ -71,11 +73,14 @@ uint64_t m_trap(uint64_t epc, uint64_t tval, uint64_t cause, uint64_t hart,
             break;
         case 7:
             printf("timer interrupt\n");
+            uint64_t f, m, s;
+            scheduler(&f, &m, &s);
             *(uint32_t*)CLINT_MTIMECMP(hart) = *(uint32_t*)CLINT_MTIME + 10000000;
+            switch_to_user(f, m, s);
             break;
         case 11:
             external_interrupt();
-            printf("Machine external interrupt CPU%d\n", hart);
+            //printf("Machine external interrupt CPU%d\n", hart);
             break;
         default:
             panic("Unhandled async trap CPU%d -> cause 0x%x\n", hart, cause);
@@ -98,14 +103,20 @@ uint64_t m_trap(uint64_t epc, uint64_t tval, uint64_t cause, uint64_t hart,
             panic("Ecall from machine mode! CPU%d ->0x%x\n", hart, epc);
             break;
         case 12:
-            printf("Instruction page fault CPU%d -> 0x%x: 0x%x\n", hart, epc, tval);
+            //printf("Instruction page fault CPU%d -> 0x%x: 0x%x\n", hart, epc, tval);
+            while (1) 
+                ;
             ret_pc += 4;
             break;
         case 13:
+            while (1) 
+                ;
             printf("Load page fault CPU%d -> 0x%x: 0x%x\n", hart, epc, tval);
             ret_pc += 4;
             break;
         case 15:
+            while (1) 
+                ;
             printf("Store page fault CPU%d -> 0x%x: 0x%x\n", hart, epc, tval);
             ret_pc += 4;
             break;

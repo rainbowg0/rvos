@@ -67,4 +67,7 @@ struct proc* proc_alloc(void* fn);
 // syscall.c
 uint64_t do_syscall(uint64_t mepc, struct trapframe *frame);
 
+// sched.c
+bool scheduler(uint64_t *f, uint64_t *m, uint64_t *s);
+
 #endif //RVOS_DEFS_H

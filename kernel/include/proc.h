@@ -8,9 +8,9 @@
 #define STACK_SIZE (8192)
 // adjust the stack to be at the bottom of the memory allocation
 // regardless of where it is on the kernel heap.
-#define STACK_ADDR (0xf00000000)
+#define STACK_ADDR (0x100000000)
 // all processes will have a defined starting point in virtual memory
-#define STARTING (0x20000000)
+#define STARTING (0x80000000)
 
 enum procstate { UNUSED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
@@ -41,6 +41,7 @@ struct proc {
     pagetable_t pgt;
     enum procstate state;
     struct procdata data;
+    uint64_t sleep_until;
 };
 
 // saved registers for kernel context switches

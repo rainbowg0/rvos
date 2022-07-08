@@ -298,8 +298,8 @@ void pagemap(pagetable_t pagetable, uint64_t va, uint64_t pa, uint64_t bits, uin
     pte = &pagetable[PX(0, va)];
     *pte = (ppn2 << 28) | (ppn1 << 19) | (ppn0 << 10) | bits | PTE_V;
     //*pte = PA2PTE(pa) | bits | PTE_V;
-    //printf("%d: map va 0x%x to pa 0x%x, actual 0x%x, pte 0x%x\n", 
-      //      i, va, pa, va2pa(pagetable, va), *pte);
+    printf("%d: map va 0x%x to pa 0x%x, actual 0x%x, pte 0x%x\n", 
+            i, va, pa, va2pa(pagetable, va), *pte);
 }
 
 // umap(): unmap and free all memory associated with a table.

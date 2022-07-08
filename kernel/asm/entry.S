@@ -54,7 +54,7 @@ _entry:
 	mret
 2:
 	# We set the return address (ra above) to this label. When kinit() is finished
-	# in C, it will return here.
+	# in Rust, it will return here.
 
 	# Setting `mstatus` (supervisor status) register:
 	# 0b01 << 11 : Previous protection mode is 1 (MPP=01 [Supervisor]).
@@ -70,9 +70,6 @@ _entry:
 	csrw	mtvec, t2
 	# Jump to first process. We put the MPP = 00 for user mode, so after
 	# mret, we will jump to the first process' addresss in user mode.
-	csrw	mepc, a0
-	li		t2, 0xaaa
-	csrw	mie, t2
 	la		ra, 4f
 	mret
 3:

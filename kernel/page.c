@@ -66,6 +66,8 @@ void pageinit() {
     // After all page structures. Also, align the ALLOC_START
     // to a page-boundary (PAGESIZE = 4096). 
     _alloc_start = PGROUNDUP(HEAP_START + 8 * PGSIZE);
+
+    printf("page init...\n");
 }
 
 // Allocate pages

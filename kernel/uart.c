@@ -1,6 +1,7 @@
 #include "include/types.h"
 #include "include/riscv.h"
 #include "include/memlayout.h"
+#include "include/defs.h"
 
 // UART control resigters are memory-mapped at
 // address UART0. This macro returns the address
@@ -88,6 +89,8 @@ void uartinit() {
     // when data is added to the receiver, the CPU is notified
     // through an interrupt.
     WriteReg(IER, IER_TX_ENABLE | IER_RX_ENABLE);
+
+    printf("uart init...\n");
 }
 
 int uartputc(char ch) {

@@ -68,6 +68,8 @@ void kmeminit() {
     _alsetfree(KMEM_HEAD);
     _alsetsize(KMEM_HEAD, KMEM_ALLOC * PGSIZE);
     KMEM_PAGE_TABLE = (pagetable_t)pagezalloc(1);
+
+    printf("kmem init...\n");
 }
 
 // allocate sub-page level allocation based on bytes

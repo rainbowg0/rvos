@@ -3,7 +3,7 @@
 #include "include/riscv.h"
 #include "include/trap.h"
 
-//static uint64_t KERNEL_TABLE;
+static uint64_t KERNEL_TABLE;
 static struct trapframe trapframes[8];
 
 extern void switch_to_user(uint64_t frame, uint64_t mepc, uint64_t satp);
@@ -12,7 +12,12 @@ extern void switch_to_user(uint64_t frame, uint64_t mepc, uint64_t satp);
 // ENTRY POINT
 //////////////////////////////////
 void kinit() {
-    /*
+    uartinit();
+    pageinit();
+    kmeminit();
+    uint64_t addr = proc_init();
+    printf("init process created at address 0x%x\n", addr);
+
     //printpages();
 
     //pagetest();
@@ -123,23 +128,9 @@ void kinit() {
     w_satp(satp_val);
     satp_fence_asid(0);
 
-    */
     // kinit() runs in machine mode
     // the job of kinit is to get us into supervisor mode
     // as soon as possible.
-    uartinit();
-    pageinit();
-    kmeminit();
-    uint64_t addr = proc_init();
-    printf("init process created at address 0x%x\n", addr);
-    
-    /*
-    printf("TEXT:   0x%x -> 0x%x\n", TEXT_START, TEXT_END);
-	printf("RODATA: 0x%x -> 0x%x\n", RODATA_START, RODATA_END);
-	printf("DATA:   0x%x -> 0x%x\n", DATA_START, DATA_END);
-	printf("BSS:    0x%x -> 0x%x\n", BSS_START, BSS_END);
-    printf("STACK:  0x%x -> 0x%x\n", KERNEL_STACK_START, KERNEL_STACK_END);
-    */
 
     plic_setthreshold(0);
     // virtio = [1..8]
@@ -153,15 +144,14 @@ void kinit() {
     printf("issuing the first context switch timer\n");
     *(uint64_t*)CLINT_MTIMECMP(0) = *(uint64_t*)CLINT_MTIME + 10000000;
 
-    uint64_t f, m, s;
-    scheduler(&f, &m, &s);
-    switch_to_user(f, m, s);
+    //uint64_t f, m, s;
+    //scheduler(&f, &m, &s);
+    //switch_to_user(f, m, s);
 
-    printf("satp %p\n", r_satp());
-    pagetable_t pgt = (pagetable_t)0x8021c000;
-    printf("walk addr %p -> 0x%x\n", addr, va2pa(pgt, addr));
+    //printf("satp %p\n", r_satp());
+    //pagetable_t pgt = (pagetable_t)0x8021c000;
+    //printf("walk addr %p -> 0x%x\n", addr, va2pa(pgt, addr));
 
-    //maprange(pgt, KERNEL_STACK_START, KERNEL_STACK_END, PTE_R|PTE_W|PTE_U);
     //return addr;
 }
 
